@@ -23,12 +23,10 @@ postgres:
   restart: always
 
 restyaboard:
-  build: .
+  image: speed/restyaboard
   links:
     - elasticsearch:elasticsearch
     - postgres:postgres
-  ports:
-    - 1234:80
   volumes_from:
     - data
   restart: always

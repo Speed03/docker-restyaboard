@@ -16,7 +16,7 @@ Quick Start
 Build image and Run container using docker-compose.
 
 ``` bash
-git clone https://github.com/namikingsoft/docker-restyaboard.git
+git clone https://github.com/speed03/docker-restyaboard.git
 cd docker-restyaboard
 
 docker-compose up -d
