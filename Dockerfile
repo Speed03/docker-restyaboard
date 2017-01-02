@@ -1,10 +1,10 @@
-FROM debian:wheezy-backports
+FROM debian:8.2
 
 ARG TERM=linux
 ARG DEBIAN_FRONTEND=noninteractive
 
 # restyaboard version
-ENV restyaboard_version=v0.3.1
+ENV restyaboard_version=0.3.1
 
 # update & install package
 RUN apt-get update --yes
@@ -16,8 +16,9 @@ RUN echo "postfix postfix/mailname string example.com" | debconf-set-selections 
 
 # deploy app
 RUN curl -L -o /tmp/restyaboard.zip https://github.com/Speed03/board/archive/${restyaboard_version}.zip \
-        && unzip /tmp/restyaboard.zip -d /usr/share/nginx/html \
-        && rm /tmp/restyaboard.zip
+        && unzip -q /tmp/restyaboard.zip -d /tmp \
+	&& cp -rf /tmp/board-${restyaboard_version}/* /usr/share/nginx/html/ \
+        && rm /tmp/restyaboard.zip && rm -rf /tmp/board-${restyaboard_version}
 
 # setting app
 WORKDIR /usr/share/nginx/html
