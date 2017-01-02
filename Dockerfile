@@ -26,7 +26,8 @@ RUN cp -R media /tmp/ \
         && cp restyaboard.conf /etc/nginx/conf.d \
         && sed -i 's/^.*listen.mode = 0660$/listen.mode = 0660/' /etc/php5/fpm/pool.d/www.conf \
         && sed -i 's|^.*fastcgi_pass.*$|fastcgi_pass unix:/var/run/php5-fpm.sock;|' /etc/nginx/conf.d/restyaboard.conf \
-        && sed -i -e "/fastcgi_pass/a fastcgi_param HTTPS 'off';" /etc/nginx/conf.d/restyaboard.conf
+        && sed -i -e "/fastcgi_pass/a fastcgi_param HTTPS 'off';" /etc/nginx/conf.d/restyaboard.conf \
+	&& sed -ie "/sites-enabled/"' s/^/#/' /etc/nginx/nginx.conf
 
 # volume
 VOLUME /usr/share/nginx/html/media
