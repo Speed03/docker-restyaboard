@@ -23,7 +23,7 @@ postgres:
   restart: always
 
 restyaboard:
-  image: speed/restyaboard
+  build: .
   links:
     - elasticsearch:elasticsearch
     - postgres:postgres

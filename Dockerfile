@@ -1,10 +1,10 @@
-FROM debian:8.2
+FROM debian:wheezy-backports
 
 ARG TERM=linux
 ARG DEBIAN_FRONTEND=noninteractive
 
 # restyaboard version
-ENV restyaboard_version=0.3.1
+ENV restyaboard_version=v0.3
 
 # update & install package
 RUN apt-get update --yes
@@ -15,10 +15,9 @@ RUN echo "postfix postfix/mailname string example.com" | debconf-set-selections 
         && apt-get install -y postfix
 
 # deploy app
-RUN curl -L -o /tmp/restyaboard.zip https://github.com/Speed03/board/archive/${restyaboard_version}.zip \
-        && unzip -q /tmp/restyaboard.zip -d /tmp \
-	&& cp -rf /tmp/board-${restyaboard_version}/* /usr/share/nginx/html/ \
-        && rm /tmp/restyaboard.zip && rm -rf /tmp/board-${restyaboard_version}
+RUN curl -L -o /tmp/restyaboard.zip https://github.com/RestyaPlatform/board/releases/download/${restyaboard_version}/board-${restyaboard_version}.zip \
+        && unzip /tmp/restyaboard.zip -d /usr/share/nginx/html \
+        && rm /tmp/restyaboard.zip
 
 # setting app
 WORKDIR /usr/share/nginx/html
@@ -26,8 +25,8 @@ RUN cp -R media /tmp/ \
         && cp restyaboard.conf /etc/nginx/conf.d \
         && sed -i 's/^.*listen.mode = 0660$/listen.mode = 0660/' /etc/php5/fpm/pool.d/www.conf \
         && sed -i 's|^.*fastcgi_pass.*$|fastcgi_pass unix:/var/run/php5-fpm.sock;|' /etc/nginx/conf.d/restyaboard.conf \
-        && sed -i -e "/fastcgi_pass/a fastcgi_param HTTPS 'off';" /etc/nginx/conf.d/restyaboard.conf \
-	&& sed -ie "/sites-enabled/"' s/^/#/' /etc/nginx/nginx.conf
+        && sed -i -e "/fastcgi_pass/a fastcgi_param HTTPS 'off';" /etc/nginx/conf.d/restyaboard.conf
+RUN sed -i 's/objectCategory/objectClass/' /usr/share/nginx/html/server/php/R/r.php
 
 # volume
 VOLUME /usr/share/nginx/html/media
